@@ -1,9 +1,11 @@
-const {Character} = require('./character');
-
+const { Character } = require('./character');
+const { Room } = require('./room');
 
 class Enemy extends Character {
   constructor(name, description, currentRoom) {
     // Fill this in
+    super(name, description, currentRoom)
+    this.cooldown = 3000;
   }
 
   setPlayer(player) {
@@ -13,6 +15,18 @@ class Enemy extends Character {
 
   randomMove() {
     // Fill this in
+    const allExits = this.currentRoom.getExits();
+    const randomExit = allExits[Math.floor(Math.random() * allExits.length)];
+
+    const nextRoom = this.currentRoom.getRoomInDirection(randomExit);
+
+    if (nextRoom) {
+      this.currentRoom = nextRoom;
+
+      nextRoom.printRoom(this);
+    } else {
+      console.log("You cannot move in that direction");
+    }
   }
 
   takeSandwich() {
@@ -28,8 +42,8 @@ class Enemy extends Character {
 
   rest() {
     // Wait until cooldown expires, then act
-    const resetCooldown = function() {
-      this.cooldown = 0;
+    const resetCooldown = function () {
+      this.cooldown = 3000;
       this.act();
     };
     setTimeout(resetCooldown, this.cooldown);

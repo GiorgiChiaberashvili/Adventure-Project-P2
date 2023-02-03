@@ -1,6 +1,8 @@
-const {Character} = require('./character');
-const {Enemy} = require('./enemy');
-const {Food} = require('./food');
+const { Character } = require('./character');
+const { Enemy } = require('./enemy');
+const { Food } = require('./food');
+const { Room } = require('./room')
+const { Item } = require('./item')
 
 class Player extends Character {
 
@@ -27,7 +29,7 @@ class Player extends Character {
       console.log(`${this.name} is not carrying anything.`);
     } else {
       console.log(`${this.name} is carrying:`);
-      for (let i = 0 ; i < this.items.length ; i++) {
+      for (let i = 0; i < this.items.length; i++) {
         console.log(`  ${this.items[i].name}`);
       }
     }
@@ -36,25 +38,58 @@ class Player extends Character {
   takeItem(itemName) {
 
     // Fill this in
-
+    if (this.currentRoom instanceof Room) {
+      let currentRoomItems = this.currentRoom.items;
+      for (let i = 0; i < currentRoomItems.length; i++) {
+        let currentItem = currentRoomItems[i];
+        if (currentItem instanceof Item) {
+          if (currentItem.name === itemName) {
+            this.items.push(this.currentRoom.items.pop(itemName));
+          }
+        }
+      }
+    }
   }
 
   dropItem(itemName) {
 
     // Fill this in
-
+    let currentRoomItems = this.currentRoom.items;
+    for (let i = 0; i < this.items.length; i++) {
+      let currentItem = this.items[i];
+      if (currentItem instanceof Item) {
+        if (currentItem.name === itemName) {
+          this.items.pop(currentItem);
+          currentRoomItems.push(currentItem);
+        }
+      }
+    }
   }
 
   eatItem(itemName) {
 
     // Fill this in
-
+    for (let i = 0; i < this.items.length; i++) {
+      let currentItem = this.items[i];
+      if (currentItem instanceof Food) {
+        if (currentItem.name === itemName) {
+          this.items.pop(currentItem);
+        }
+      }
+    }
   }
 
   getItemByName(name) {
 
     // Fill this in
-
+    for (let i = 0; i < this.items.length; i++) {
+      let currentItem = this.items[i];
+      if (currentItem instanceof Item) {
+        if (currentItem.name === name) {
+          return this.items.pop(currentItem);
+        }
+      }
+    }
   }
 
   hit(name) {
@@ -62,6 +97,7 @@ class Player extends Character {
     // Fill this in
 
   }
+
 
   die() {
     console.log("You are dead!");

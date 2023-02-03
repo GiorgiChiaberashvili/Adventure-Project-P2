@@ -1,3 +1,5 @@
+const Item = require('./item')
+
 class Room {
 
   constructor(name, description) {
@@ -54,15 +56,22 @@ class Room {
   getItemByName(name) {
 
     // Fill this in
-
+    for (let i = 0; i < this.items.length; i++) {
+      let currentItem = this.items[i];
+      if (currentItem instanceof Item) {
+        if (currentItem.name === name) {
+          return this.items.pop(currentItem);
+        }
+      }
+    }
   }
 
   getEnemyByName(name) {
 
     // Fill this in
 
+  }
 }
-
 module.exports = {
   Room,
 };
