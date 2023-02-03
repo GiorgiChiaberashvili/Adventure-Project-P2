@@ -1,5 +1,3 @@
-const Item = require('./item')
-
 class Room {
 
   constructor(name, description) {
@@ -54,24 +52,42 @@ class Room {
   }
 
   getItemByName(name) {
+    let i = this.getItemIndexByName(name);
+    return this.items[i];
+  }
 
-    // Fill this in
+  getItemIndexByName(itemName) {
     for (let i = 0; i < this.items.length; i++) {
-      let currentItem = this.items[i];
-      if (currentItem instanceof Item) {
-        if (currentItem.name === name) {
-          return this.items.pop(currentItem);
-        }
+      let item = this.items[i];
+      if (item.name === itemName) {
+        return i;
       }
-    }
+    };
   }
 
   getEnemyByName(name) {
-
-    // Fill this in
-
+    let i = this.getEnemyIndexByName(name);
+    return this.getEnemies()[i];
   }
+
+  getEnemyIndexByName(name) {
+    let enemies = this.getEnemies();
+
+    for (let i = 0; i < enemies.length; i++) {
+      let enemy = enemies[i];
+      if (enemy.name === name) {
+        return i;
+      }
+    };
+  }
+
+  removeItemByName(itemName) {
+    let i = this.getItemIndexByName(itemName);
+    this.items.splice(i);
+  }
+
 }
+
 module.exports = {
   Room,
 };

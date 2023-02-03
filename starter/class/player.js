@@ -1,8 +1,6 @@
 const { Character } = require('./character');
 const { Enemy } = require('./enemy');
 const { Food } = require('./food');
-const { Room } = require('./room')
-const { Item } = require('./item')
 
 class Player extends Character {
 
@@ -37,67 +35,58 @@ class Player extends Character {
 
   takeItem(itemName) {
 
-    // Fill this in
-    if (this.currentRoom instanceof Room) {
-      let currentRoomItems = this.currentRoom.items;
-      for (let i = 0; i < currentRoomItems.length; i++) {
-        let currentItem = currentRoomItems[i];
-        if (currentItem instanceof Item) {
-          if (currentItem.name === itemName) {
-            this.items.push(this.currentRoom.items.pop(itemName));
-          }
-        }
-      }
-    }
+    this.items.push(this.currentRoom.getItemByName(itemName));
+    this.currentRoom.removeItemByName(itemName);
+
   }
 
   dropItem(itemName) {
 
-    // Fill this in
-    let currentRoomItems = this.currentRoom.items;
-    for (let i = 0; i < this.items.length; i++) {
-      let currentItem = this.items[i];
-      if (currentItem instanceof Item) {
-        if (currentItem.name === itemName) {
-          this.items.pop(currentItem);
-          currentRoomItems.push(currentItem);
-        }
-      }
-    }
+    let item = this.getItemByName(itemName);
+
+    this.currentRoom.items.push(item);
+
+    this.removeItemByName(itemName);
+
   }
 
   eatItem(itemName) {
 
-    // Fill this in
-    for (let i = 0; i < this.items.length; i++) {
-      let currentItem = this.items[i];
-      if (currentItem instanceof Food) {
-        if (currentItem.name === itemName) {
-          this.items.pop(currentItem);
-        }
-      }
+    let item = this.getItemByName(itemName);
+
+    if (item instanceof Food) {
+      this.removeItemByName(itemName);
     }
+
   }
 
   getItemByName(name) {
 
-    // Fill this in
+    let i = this.getItemIndexByName(name);
+    return this.items[i];
+
+  }
+
+  getItemIndexByName(itemName) {
     for (let i = 0; i < this.items.length; i++) {
-      let currentItem = this.items[i];
-      if (currentItem instanceof Item) {
-        if (currentItem.name === name) {
-          return this.items.pop(currentItem);
-        }
+      let item = this.items[i];
+      if (item.name === itemName) {
+        return i;
       }
-    }
+    };
+  }
+
+  removeItemByName(itemName) {
+    let i = this.getItemIndexByName(itemName);
+    this.items.splice(i);
   }
 
   hit(name) {
 
-    // Fill this in
+    let enemy = this.currentRoom.getEnemyByName(name);
+    enemy.applyDamage();
 
   }
-
 
   die() {
     console.log("You are dead!");

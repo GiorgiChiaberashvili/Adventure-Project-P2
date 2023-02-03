@@ -1,11 +1,11 @@
-const { Character } = require('./character');
-const { Room } = require('./room');
+const {Character} = require('./character');
+
 
 class Enemy extends Character {
-  constructor(name, description, currentRoom) {
-    // Fill this in
-    super(name, description, currentRoom)
-    this.cooldown = 3000;
+  constructor(name, description, currentRoom, cooldown = 3000) {
+    super(name, description, currentRoom);
+    this.cooldown = cooldown;
+    this.attackTarget = null;
   }
 
   setPlayer(player) {
@@ -14,19 +14,26 @@ class Enemy extends Character {
 
 
   randomMove() {
-    // Fill this in
-    const allExits = this.currentRoom.getExits();
-    const randomExit = allExits[Math.floor(Math.random() * allExits.length)];
+    // generate a random direction from valid exits to currentRoom
+    let direction = this.getRandomExit();
 
-    const nextRoom = this.currentRoom.getRoomInDirection(randomExit);
+    //try to get the room in that direction nextRoom
+    const nextRoom = this.currentRoom.getRoomInDirection(direction);
 
-    if (nextRoom) {
-      this.currentRoom = nextRoom;
+    //set currentRoom to the randomly generated valid exit
+    this.currentRoom = nextRoom;
 
-      nextRoom.printRoom(this);
-    } else {
-      console.log("You cannot move in that direction");
-    }
+    this.cooldown = 3000;
+  }
+
+  getRandomExit() {
+    //generate an array of valid exits from the currentRoom
+    const exits = this.currentRoom.getExits();
+
+    //generate a random key from the exits array
+    let direction = exits[Math.floor(Math.random() * exits.length)];
+
+    return direction;
   }
 
   takeSandwich() {
@@ -42,19 +49,22 @@ class Enemy extends Character {
 
   rest() {
     // Wait until cooldown expires, then act
-    const resetCooldown = function () {
+    const resetCooldown = function() {
       this.cooldown = 3000;
       this.act();
     };
     setTimeout(resetCooldown, this.cooldown);
   }
 
-  attack() {
-    // Fill this in
+  attack(damage = 10) {
+    this.attackTarget.applyDamage(damage);
+    this.cooldown = 3000;
   }
 
   applyDamage(amount) {
-    // Fill this in
+    this.health -= amount;
+
+    this.attackTarget = this.player;
   }
 
 
@@ -70,6 +80,7 @@ class Enemy extends Character {
     }
 
     // Fill this in
+
   }
 
 

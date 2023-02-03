@@ -9,7 +9,7 @@ class World {
   static enemies = [];
 
   static setPlayer(player) {
-    for (let i = 0 ; i < World.enemies.length ; i++) {
+    for (let i = 0; i < World.enemies.length; i++) {
       if (World.enemies[i]) {
         World.enemies[i].setPlayer(player);
       }
@@ -17,7 +17,7 @@ class World {
   }
 
   static startGame() {
-    for (let i = 0 ; i < World.enemies.length ; i++) {
+    for (let i = 0; i < World.enemies.length; i++) {
       if (World.enemies[i]) {
         World.enemies[i].rest();
       }
@@ -36,17 +36,17 @@ class World {
 
     // Instantiate new room objects
     // Get name, id and description from room data
-    for (let i = 0 ; i < roomList.length ; i++) {
+    for (let i = 0; i < roomList.length; i++) {
 
-        let roomData = roomList[i];
-        let newRoom = new Room(roomData.name, roomData.description);
+      let roomData = roomList[i];
+      let newRoom = new Room(roomData.name, roomData.description);
 
-        World.rooms[roomData.id] = newRoom;
+      World.rooms[roomData.id] = newRoom;
     }
 
     // Connect rooms by ID
     // Note that all rooms must be created before they can be connected
-    for (let i = 0 ; i < roomList.length ; i++) {
+    for (let i = 0; i < roomList.length; i++) {
 
       let roomID = roomList[i].id;
       let roomConnections = roomList[i].exits;
@@ -60,7 +60,7 @@ class World {
     }
 
     // Instantiate items
-    for (let i = 0 ; i < itemList.length ; i++) {
+    for (let i = 0; i < itemList.length; i++) {
 
       let itemData = itemList[i];
       let newItem;
@@ -73,10 +73,10 @@ class World {
 
       let itemRoom = World.rooms[itemData.room];
       itemRoom.items.push(newItem);
-   }
+    }
 
     // Instantiate enemies
-    for (let i = 0 ; i < enemyList.length ; i++) {
+    for (let i = 0; i < enemyList.length; i++) {
 
       let enemyData = enemyList[i];
       let enemyRoom = World.rooms[enemyData.room];
